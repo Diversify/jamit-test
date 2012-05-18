@@ -2,6 +2,7 @@ package examples
 
 import org.specs2.mutable.Specification
 import dispatch._
+import org.specs2.execute.Failure
 
 class RegisterSpec extends Specification {
 
@@ -16,22 +17,22 @@ class RegisterSpec extends Specification {
       resp mustEqual """tjohej"""
     }
     "not allow registring with different password" in {
-      failure
+      Failure("todo")
     }
     "not allow registring with missing name" in {
-      failure
+      Failure("todo")
     }
     "not allow registring with empty email" in {
-      failure
+      Failure("todo")
     }
     "not allow registring with empty phone no" in {
-      failure
+      Failure("todo")
     }
     "not allow registring with empty role" in {
-      failure
+      Failure("todo")
     }
     "not allow registring with empty passwords" in {
-      failure
+      Failure("todo")
     }
   }
 
