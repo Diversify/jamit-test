@@ -15,6 +15,24 @@ class RegisterSpec extends Specification {
       val resp = Http(register << params as_str)
       resp mustEqual """tjohej"""
     }
+    "not allow registring with different password" in {
+      todo
+    }
+    "not allow registring with missing name" in {
+      todo
+    }
+    "not allow registring with empty email" in {
+      todo
+    }
+    "not allow registring with empty phone no" in {
+      todo
+    }
+    "not allow registring with empty role" in {
+      todo
+    }
+    "not allow registring with empty passwords" in {
+      todo
+    }
   }
 
 }
