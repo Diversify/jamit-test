@@ -16,22 +16,22 @@ class RegisterSpec extends Specification {
       resp mustEqual """tjohej"""
     }
     "not allow registring with different password" in {
-      todo
+      failure
     }
     "not allow registring with missing name" in {
-      todo
+      failure
     }
     "not allow registring with empty email" in {
-      todo
+      failure
     }
     "not allow registring with empty phone no" in {
-      todo
+      failure
     }
     "not allow registring with empty role" in {
-      todo
+      failure
     }
     "not allow registring with empty passwords" in {
-      todo
+      failure
     }
   }
 
