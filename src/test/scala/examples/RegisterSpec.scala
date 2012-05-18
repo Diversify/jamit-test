@@ -5,6 +5,8 @@ import dispatch._
 
 class RegisterSpec extends Specification {
 
+  "Registration Examples".title
+
   val register = :/("localhost", 9998) / "register"
 
   "Register Service" should {
