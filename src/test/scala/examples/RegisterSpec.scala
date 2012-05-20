@@ -25,7 +25,7 @@ The registration service should allow users to register theirselves using the fo
   end
 
   type Tup6 = Tuple6[String, String, String, String, String, String]
-  val register = :/("localhost", 9998) / "register"
+  val register = :/("localhost", 9998) / "jamit-logic" / "register"
 
   def t1 =
       "name"  || "email"            | "phone"       | "role"  | "password1" | "password2" |
