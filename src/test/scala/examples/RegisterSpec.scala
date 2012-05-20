@@ -18,7 +18,8 @@ The registration service should allow users to register theirselves using the fo
  * role
  * two equal passwords
 
-### Examples                                                                  """ ^
+### Examples
+                                                                              """ ^
   "allow registring using normal field values"                                ! t1^
   "not allow registering with different passwords or missing arguments"       ! t2^
   end
