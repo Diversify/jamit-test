@@ -23,19 +23,15 @@ The registration service should allow users to register theirselves using the fo
   "not allow registering with different passwords or missing arguments"       ! t2^
   end
 
+  type Tup6 = Tuple6[String, String, String, String, String, String]
   val register = :/("localhost", 9998) / "register"
 
-  def t1 = {
-    val params = Map("name" -> "Kalle", "email" -> "kalle@hemma.se", "phone" -> "08-987654", "role" -> "Musician", "password1" -> "kalle123", "password2" -> "kalle123")
-    val res = Http(register << params as_str)
-
-    val json = parse[Map[String, String]](res)
-    json("name") mustEqual(params("name"))
-    json("email") mustEqual(params("email"))
-    json("phone") mustEqual(params("phone"))
-    json("role") mustEqual(params("role"))
-    json("password") mustNotEqual("")
-  }
+  def t1 =
+      "name"  || "email"            | "phone"       | "role"  | "password1" | "password2" |
+      "Kalle" !! "kalle@hemma.se"   ! "08-987654"   ! "Fan"   ! "kalle123"  ! "kalle123"  |
+      "Lasse" !! "lasse@borta.se"   ! "0709-877554" ! "Fan"   ! "lasse654"  ! "lasse654"  |> {
+      (name, mail, phone, role, password1, password2) => registeringShouldWork((name, mail, phone, role, password1, password2))
+    }
 
   def t2 =
       "name"  || "email"            | "phone"     | "role"  | "password1" | "password2" |
@@ -48,10 +44,22 @@ The registration service should allow users to register theirselves using the fo
       (name, mail, phone, role, password1, password2) => registeringShouldFail((name, mail, phone, role, password1, password2))
     }
 
-  type Tup6 = Tuple6[String, String, String, String, String, String]
+  def mapTup(tup: Tup6) = Map("name" -> tup._1, "email" -> tup._2, "phone" -> tup._3, "role" -> tup._4, "password1" -> tup._5, "password2" -> tup._6)
+
+  def registeringShouldWork(tup: Tup6): Result = {
+    val params = mapTup(tup)
+    val res = Http(register << params as_str)
+
+    val json = parse[Map[String, String]](res)
+    json("name") mustEqual(params("name"))
+    json("email") mustEqual(params("email"))
+    json("phone") mustEqual(params("phone"))
+    json("role") mustEqual(params("role"))
+    json("password") mustNotEqual("")
+  }
 
   def registeringShouldFail(tup: Tup6): Result = {
-    val params = Map("name" -> tup._1, "email" -> tup._2, "phone" -> tup._3, "role" -> tup._4, "password1" -> tup._5, "password2" -> tup._6)
+    val params = mapTup(tup)
     val res = Http(register << params as_str)
 
     val json = parse[Map[String, String]](res)
