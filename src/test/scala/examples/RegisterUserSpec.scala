@@ -6,35 +6,33 @@ import execute._
 import matcher.DataTables
 import com.codahale.jerkson.Json._
 
-class RegisterSpec extends Specification with DataTables { def is = noindent  ^ """
+class RegisterUserSpec extends Specification with DataTables { def is = noindent  ^ """
 
 ### Spec
 
-The registration service should allow users to register theirselves using the following fields:
+Actors: Users = Musician, Fan/Auditor and Venue Owner.
 
- * name
- * email
- * phone no
- * role
- * two equal passwords
+A user should be able to be registered. Data that can be registered should be:
+
+User Name = Mandatory, E-mail = Mandatory, Phone, Role = Mandatory, Password (x2)
 
 ### Examples
-                                                                              """ ^
-  "allow registring using normal field values"                                ! t1^
-  "not allow registering with different passwords or missing arguments"       ! t2^
+                                                                                    """ ^
+  "allow registring users using normal field values"                                ! t1^
+  "not allow registering userswith different passwords or missing arguments"        ! t2^
   end
 
-  type Tup6 = Tuple6[String, String, String, String, String, String]
-  val register = :/("localhost", 9998) / "register"
+  private type Tup6 = Tuple6[String, String, String, String, String, String]
+  private val register = :/("localhost", 8080) / "jamit-logic/register-user"
 
-  def t1 =
+  private def t1 =
       "name"  || "email"            | "phone"       | "role"  | "password1" | "password2" |
       "Kalle" !! "kalle@hemma.se"   ! "08-987654"   ! "Fan"   ! "kalle123"  ! "kalle123"  |
       "Lasse" !! "lasse@borta.se"   ! "0709-877554" ! "Fan"   ! "lasse654"  ! "lasse654"  |> {
       (name, mail, phone, role, password1, password2) => registeringShouldWork((name, mail, phone, role, password1, password2))
     }
 
-  def t2 =
+  private def t2 =
       "name"  || "email"            | "phone"     | "role"  | "password1" | "password2" |
       "Kalle" !! "kalle@hemma.se"   ! "08-987654" ! "Fan"   ! "kalle123"  ! "kalle456"  |
       ""      !! "kalle@hemma.se"   ! "08-987654" ! "Fan"   ! "kalle123"  ! "kalle123"  |
@@ -45,9 +43,9 @@ The registration service should allow users to register theirselves using the fo
       (name, mail, phone, role, password1, password2) => registeringShouldFail((name, mail, phone, role, password1, password2))
     }
 
-  def mapTup(tup: Tup6) = Map("name" -> tup._1, "email" -> tup._2, "phone" -> tup._3, "role" -> tup._4, "password1" -> tup._5, "password2" -> tup._6)
+  private def mapTup(tup: Tup6) = Map("name" -> tup._1, "email" -> tup._2, "phone" -> tup._3, "role" -> tup._4, "password1" -> tup._5, "password2" -> tup._6)
 
-  def registeringShouldWork(tup: Tup6): Result = {
+  private def registeringShouldWork(tup: Tup6): Result = {
     val params = mapTup(tup)
     val res = Http(register << params as_str)
 
@@ -59,7 +57,7 @@ The registration service should allow users to register theirselves using the fo
     json("password") mustNotEqual("")
   }
 
-  def registeringShouldFail(tup: Tup6): Result = {
+  private def registeringShouldFail(tup: Tup6): Result = {
     val params = mapTup(tup)
     val res = Http(register << params as_str)
 
