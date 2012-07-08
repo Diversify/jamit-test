@@ -51,10 +51,11 @@ Public/Private, Maximum No of Musicians, Contact = Mandatory
   private def mapTup(tup: Tup7) = Map("name" -> tup._1, "address" -> tup._2, "postalCode" -> tup._3, "city" -> tup._4, "public" -> tup._5.toString, "maxNoOfMusicians" -> tup._6.toString, "contact" -> tup._7)
 
   private def registeringShouldWork(tup: Tup7): Result = {
+
     val params = mapTup(tup)
     val res = Http(register << params as_str)
-
     val json = parse[Map[String, String]](res)
+
     json("name") mustEqual params("name")
     json("address") mustEqual params("address")
     json("postalCode") mustEqual params("postalCode")
